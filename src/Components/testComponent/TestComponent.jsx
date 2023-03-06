@@ -9,12 +9,13 @@ import {
   KeyboardAvoidingView,
   ImageBackground,
   TouchableWithoutFeedback,
-  Keyboard,
 } from "react-native";
+import { SvgComponent } from "../SVG/SvgComponent";
 const image = require("../../../assets/img/Photo-BG.jpg");
 
-export const LoginForm = ({ navigation }) => {
+export const TestComponent = () => {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+  const [isLoginFocus, setIsLoginFocus] = useState(false);
   const [isEmailFocus, setIsEmailFocus] = useState(false);
   const [isPasswordFocus, setIsPasswordFocus] = useState(false);
   const [login, setLogin] = useState("");
@@ -24,6 +25,11 @@ export const LoginForm = ({ navigation }) => {
   const onHideKeyboard = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
+  };
+
+  const focusLoginInput = () => {
+    setIsLoginFocus(true);
+    setIsShowKeyboard(true);
   };
 
   const focusEmailInput = () => {
@@ -61,10 +67,33 @@ export const LoginForm = ({ navigation }) => {
             <View
               style={{
                 ...styles.form,
-                marginTop: isShowKeyboard ? 273 : "auto",
+                marginTop: isShowKeyboard ? 147 : "auto",
               }}
             >
-              <Text style={styles.title}>Войти</Text>
+              <View style={styles.avatarBox}>
+                <TouchableOpacity
+                  style={styles.addPhotoBtn}
+                  activeOpacity={0.5}
+                >
+                  <SvgComponent />
+                </TouchableOpacity>
+              </View>
+              <Text style={styles.title}>Регистрация</Text>
+              <View>
+                <TextInput
+                  style={isLoginFocus ? styles.focusInput : styles.input}
+                  placeholder={"Логин"}
+                  placeholderTextColor={"#BDBDBD"}
+                  keyboardType={"default"}
+                  cursorColor={"#212121"}
+                  onFocus={focusLoginInput}
+                  onBlur={() => setIsLoginFocus(false)}
+                  value={login}
+                  onChangeText={(value) => {
+                    setLogin(value);
+                  }}
+                />
+              </View>
               <View>
                 <TextInput
                   style={isEmailFocus ? styles.focusInput : styles.input}
@@ -105,20 +134,16 @@ export const LoginForm = ({ navigation }) => {
                 <View slyle={styles.bottomLine}></View>
               </View>
               <TouchableOpacity
-                style={styles.logInBtn}
+                style={styles.registrationBtn}
                 activeOpacity={0.8}
                 onPress={handleSubmit}
               >
-                <Text style={styles.logInBtnText}>Войти</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.registrationBtn}
-                activeOpacity={0.5}
-                onPress={() => navigation.navigate("Registration")}
-              >
                 <Text style={styles.registrationBtnText}>
-                  Нет аккаунта? Зарегистрироваться
+                  Зарегистрироваться
                 </Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.logInBtn} activeOpacity={0.5}>
+                <Text style={styles.logInBtnText}>Уже есть аккаунт? Войти</Text>
               </TouchableOpacity>
               <View style={styles.bottomLine} />
             </View>
@@ -148,6 +173,21 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 25,
     marginBottom: "auto",
   },
+  avatarBox: {
+    position: "absolute",
+    top: -60,
+    left: "50%",
+    transform: [{ translateX: -60 }],
+    width: 120,
+    height: 120,
+    backgroundColor: "#F6F6F6",
+    borderRadius: 16,
+  },
+  addPhotoBtn: {
+    position: "absolute",
+    bottom: 14,
+    right: -12,
+  },
   title: {
     fontFamily: "Roboto",
     fontStyle: "normal",
@@ -155,7 +195,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     lineHeight: 35,
     letterSpacing: 0.01,
-    marginTop: 32,
+    marginTop: 92,
     marginBottom: 33,
     textAlign: "center",
   },
@@ -210,7 +250,7 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     color: "#1B4371",
   },
-  logInBtn: {
+  registrationBtn: {
     marginHorizontal: 16,
     marginTop: 27,
     marginBottom: 16,
@@ -220,7 +260,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     alignItems: "center",
   },
-  logInBtnText: {
+  registrationBtnText: {
     fontFamily: "Roboto",
     fontStyle: "normal",
     fontSize: 16,
@@ -228,11 +268,11 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     color: "#fff",
   },
-  registrationBtn: {
+  logInBtn: {
     alignItems: "center",
-    marginBottom: 132,
+    marginBottom: 66,
   },
-  registrationBtnText: {
+  logInBtnText: {
     fontFamily: "Roboto",
     fontStyle: "normal",
     fontSize: 16,
